@@ -47,7 +47,7 @@
   }
 
   .box1, .box2, .box3, .box4, .box5, .box6 {
-    font-size: 4vw;
+    font-size: max(4vw, 25px);
     text-align: center;
     line-height: 4vw; /* vertically centers single-character text */
     font-weight: bold;
