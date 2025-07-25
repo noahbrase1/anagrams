@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-      <div class="box1"></div>
-      <div class="box2"></div>
-      <div class="box3"></div>
-      <div class="box4"></div>
-      <div class="box5"></div>
-      <div class="box6"></div>
+      <div class="box1" id="box1">{{ box1 }}</div>
+      <div class="box2" id="box2">{{ box2 }}</div>
+      <div class="box3" id="box3">{{ box3 }}</div>
+      <div class="box4" id="box4">{{ box4 }}</div>
+      <div class="box5" id="box5">{{ box5 }}</div>
+      <div class="box6" id="box6">{{ box6 }}</div>
       <div>
-        <button class="startButton" onclick="start()">Start</button>
+        <button class="startButton" @click="start">Start</button>
       </div>
   </div>
 </template>
@@ -46,6 +46,14 @@
     border-radius: 1vw;
   }
 
+  .box1, .box2, .box3, .box4, .box5, .box6 {
+    font-size: 4vw;
+    text-align: center;
+    line-height: 4vw; /* vertically centers single-character text */
+    font-weight: bold;
+    color: black;
+  }
+
   .container > div:last-child {
     width: 100%;
     display: flex;
@@ -61,6 +69,36 @@
     border-radius: 1vw;
     cursor: pointer;
   }
-
-
 </style>
+
+<script setup>
+
+
+  import { ref } from 'vue'
+
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+    'X', 'Y', 'Z'
+  ]
+  const box1 = ref('')
+  const box2 = ref('')
+  const box3 = ref('')
+  const box4 = ref('')
+  const box5 = ref('')
+  const box6 = ref('')
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
+  function start() {
+    box1.value = letters[getRandomInt(0, letters.length - 1)]
+    box2.value = letters[getRandomInt(0, letters.length - 1)]
+    box3.value = letters[getRandomInt(0, letters.length - 1)]
+    box4.value = letters[getRandomInt(0, letters.length - 1)]
+    box5.value = letters[getRandomInt(0, letters.length - 1)]
+    box6.value = letters[getRandomInt(0, letters.length - 1)]
+  }
+
+
+</script>
