@@ -58,7 +58,6 @@
     height: 3vw;
     min-width: 66px;
     min-height: 25px;
-    font-size: 1rem;
     border-radius: 0.5vw;
     cursor: pointer;
   }
