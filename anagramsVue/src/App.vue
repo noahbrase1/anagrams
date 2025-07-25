@@ -49,7 +49,7 @@
   .box1, .box2, .box3, .box4, .box5, .box6 {
     font-size: max(4vw, 25px);
     text-align: center;
-    line-height: 4vw; /* vertically centers single-character text */
+    line-height: min(4vw, 25px); /* vertically centers single-character text */
     font-weight: bold;
     color: black;
   }
