@@ -18,14 +18,15 @@
   body {
     display: flex;
     justify-content: center;   /* horizontal center */
-    align-items: center;       /* vertical center */
+    align-items: flex-start;       /* vertical center */
     height: 100vh;             /* make body fill the viewport height */
     margin: 0;                 /* remove default margin for full control */
+    padding-top: 10vh;
   }
 
   .container {
     display: flex;
-    justify-content: center; /* or space-between */
+    justify-content: center;
     flex-wrap: wrap;
     width: 80vw;
     margin: 0 auto;
@@ -35,6 +36,8 @@
   .box1, .box2, .box3, .box4, .box5, .box6 {
     width: 5vw;
     height: 5vw;
+    min-width: 30px;
+    min-height: 30px;
     background-color: white;
     border: 0.5vw solid black;
   }
