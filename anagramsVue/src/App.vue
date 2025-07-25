@@ -6,6 +6,7 @@
       <div class="box4" id="box4">{{ box4 }}</div>
       <div class="box5" id="box5">{{ box5 }}</div>
       <div class="box6" id="box6">{{ box6 }}</div>
+      <div class="box7" id="box7">{{ box7 }}</div>
       <div>
         <button class="startButton" @click="start">Start</button>
       </div>
@@ -36,7 +37,7 @@
     gap: 2vw;
   }
 
-  .box1, .box2, .box3, .box4, .box5, .box6 {
+  .box1, .box2, .box3, .box4, .box5, .box6, .box7 {
     width: 5vw;
     height: 5vw;
     min-width: 30px;
@@ -46,7 +47,7 @@
     border-radius: 1vw;
   }
 
-  .box1, .box2, .box3, .box4, .box5, .box6 {
+  .box1, .box2, .box3, .box4, .box5, .box6, .box7 {
     font-size: max(4vw, 25px);
     text-align: center;
     line-height: max(4vw, 25px); /* vertically centers single-character text */
@@ -76,28 +77,36 @@
 
   import { ref } from 'vue'
 
-  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+  const letters = ['B', 'C', 'D', 'F', 'G', 'H', 'J',
+    'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W',
     'X', 'Y', 'Z'
   ]
+
+  const vowels = ['A', 'E', 'I', 'O', 'U']
+
+  const unknown = [letters, vowels]
+
   const box1 = ref('')
   const box2 = ref('')
   const box3 = ref('')
   const box4 = ref('')
   const box5 = ref('')
   const box6 = ref('')
+  const box7 = ref('')
 
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
   function start() {
+    const either = unknown[getRandomInt(0, unknown.length - 1)]
     box1.value = letters[getRandomInt(0, letters.length - 1)]
-    box2.value = letters[getRandomInt(0, letters.length - 1)]
+    box2.value = vowels[getRandomInt(0, vowels.length - 1)]
     box3.value = letters[getRandomInt(0, letters.length - 1)]
     box4.value = letters[getRandomInt(0, letters.length - 1)]
-    box5.value = letters[getRandomInt(0, letters.length - 1)]
+    box5.value = vowels[getRandomInt(0, vowels.length - 1)]
     box6.value = letters[getRandomInt(0, letters.length - 1)]
+    box7.value = either[getRandomInt(0, either.length - 1)]
   }
 
 
