@@ -10,6 +10,18 @@
       <div class="timer-wrapper">
         <div class="timer"> {{ timeLeft }} </div>
       </div>
+      <div class="answer-wrapper">
+        <input
+          class="answer-input"
+          v-model="userAnswer"
+          type="text"
+          placeholder="Type your answer here"
+          @keyup.enter="checkAnswer"
+        />
+      </div>
+      <div class="answers">
+        <div v-for="(word, index) in answers" :key="index">{{ word }}</div>
+      </div>
       <div>
         <button class="startButton" @click="start">Start</button>
       </div>
@@ -72,6 +84,41 @@
     font-weight: bold;
   }
 
+  .answer-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5vw;
+    margin-bottom: 1vw;
+  }
+
+  .answer-input {
+    width: 40vw;
+    min-width: 200px;
+    padding: 0.5vw;
+    font-size: 1.5vw;
+    border: 0.3vw solid #444;
+    border-radius: 0.8vw;
+  }
+
+  .answers {
+    width: 25vw;
+    height: 15vw;
+    min-width: 100px;
+    min-height: 70px;
+    background-color: white;
+    border: 0.5vw solid black;
+    border-radius: 1vw;
+  }
+
+  .answers {
+    font-size: max(1.5vw, 10px);
+    line-height: max(1.5vw, 10px); /* vertically centers single-character text */
+    font-weight: bold;
+    color: black;
+  }
+
+
   .container > div:last-child {
     width: 100%;
     display: flex;
@@ -104,6 +151,7 @@
 
   const unknown = [letters, vowels]
 
+  const userAnswer = ref('')
   const box1 = ref('')
   const box2 = ref('')
   const box3 = ref('')
@@ -111,6 +159,7 @@
   const box5 = ref('')
   const box6 = ref('')
   const box7 = ref('')
+  const answers = ref([])
 
   const timeLeft = ref(30)
   const timerActive = ref(false)
@@ -143,5 +192,23 @@
         }
       }, 1000)
   }
+
+    async function checkAnswer() {
+      const word = userAnswer.value.trim().toLowerCase()
+      if (!word) return
+
+      try {
+        const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        if (res.ok) {
+          answers.value.push(userAnswer.value)
+        } else {
+          console.log(`${word} is NOT a valid English word`)
+        }
+      } catch (err) {
+        console.error('Error checking word:', err)
+      }
+
+      userAnswer.value = ''
+    }
 
 </script>
