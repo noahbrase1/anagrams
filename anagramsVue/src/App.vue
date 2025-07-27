@@ -20,7 +20,9 @@
         />
       </div>
       <div class="answers">
-        <div v-for="(word, index) in answers" :key="index">{{ word }}</div>
+        <div class="column" v-for="(column, colIndex) in chunkedAnswers" :key="colIndex">
+          <div class="word" v-for="(word, wordIndex) in column" :key="wordIndex">{{ word }}</div>
+        </div>
       </div>
       <div>
         <button class="startButton" @click="start">Start</button>
@@ -107,7 +109,7 @@
     min-width: 100px;
     min-height: 70px;
     background-color: white;
-    border: 0.5vw solid black;
+    border: none;
     border-radius: 1vw;
   }
 
@@ -116,6 +118,16 @@
     line-height: max(1.5vw, 10px); /* vertically centers single-character text */
     font-weight: bold;
     color: black;
+  }
+
+  .answers {
+    display: flex;
+    gap: 2vw;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
   }
 
 
@@ -140,7 +152,7 @@
 <script setup>
 
 
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
 
   const letters = ['B', 'C', 'D', 'F', 'G', 'H', 'J',
     'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W',
@@ -169,6 +181,15 @@
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
+  const chunkedAnswers = computed(() => {
+    const chunkSize = 6
+    const chunks = []
+    for (let i = 0; i < answers.value.length; i += chunkSize) {
+      chunks.push(answers.value.slice(i, i + chunkSize))
+    }
+    return chunks
+  })
+
   function start() {
     const either = unknown[getRandomInt(0, unknown.length - 1)]
     box1.value = letters[getRandomInt(0, letters.length - 1)]
@@ -196,19 +217,13 @@
     async function checkAnswer() {
       const word = userAnswer.value.trim().toLowerCase()
       if (!word) return
-
-      try {
         const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
         if (res.ok) {
           answers.value.push(userAnswer.value)
-        } else {
-          console.log(`${word} is NOT a valid English word`)
-        }
-      } catch (err) {
-        console.error('Error checking word:', err)
       }
 
+
       userAnswer.value = ''
-    }
+  }
 
 </script>
