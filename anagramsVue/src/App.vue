@@ -206,13 +206,13 @@
   function start() {
     const either1 = unknown1[getRandomInt(0, unknown1.length - 1)]
     const either2 = unknown1[getRandomInt(0, unknown2.length - 1)]
-    box1.value = either2[getRandomInt(0, letters.length - 1)]
+    box1.value = either2[getRandomInt(0, either2.length - 1)]
     box2.value = vowels[getRandomInt(0, vowels.length - 1)]
     box3.value = letters[getRandomInt(0, letters.length - 1)]
     box4.value = letters[getRandomInt(0, letters.length - 1)]
     box5.value = vowels[getRandomInt(0, vowels.length - 1)]
     box6.value = letters[getRandomInt(0, letters.length - 1)]
-    box7.value = either1[getRandomInt(0, either.length - 1)]
+    box7.value = either1[getRandomInt(0, either1.length - 1)]
     chosenLetters.value = [
       box1.value,
       box2.value,
