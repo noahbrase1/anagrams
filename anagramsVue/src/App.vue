@@ -1,4 +1,5 @@
 <template>
+  <head><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
   <div class="container">
       <div class="box1" id="box1">{{ box1 }}</div>
       <div class="box2" id="box2">{{ box2 }}</div>
@@ -15,6 +16,11 @@
           class="answer-input"
           v-model="userAnswer"
           type="text"
+          inputmode="text"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="done"
           placeholder="Type your answer here"
           @keyup.enter="checkAnswer"
         />
@@ -34,6 +40,8 @@
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   body {
@@ -174,6 +182,7 @@
   const buttonLabel = ref('Start')
   const answers = ref([])
   let chosenLetters = ref([])
+  const whitelist = ['is', 'be', 'to', 'a', 'an', 'in', 'on', 'by']
 
   const timeLeft = ref(60)
   const timerActive = ref(false)
@@ -201,7 +210,6 @@
     box5.value = vowels[getRandomInt(0, vowels.length - 1)]
     box6.value = letters[getRandomInt(0, letters.length - 1)]
     box7.value = either[getRandomInt(0, either.length - 1)]
-    const whitelist = ['is', 'be', 'to', 'a', 'an', 'in', 'on', 'by']
     chosenLetters.value = [
       box1.value,
       box2.value,
@@ -211,7 +219,7 @@
       box6.value,
       box7.value
     ]
-
+    answers.value = []
     buttonLabel.value = 'Reset'
 
     if (timer) clearInterval(timer)
@@ -228,21 +236,28 @@
       }, 1000)
   }
 
-    async function checkAnswer() {
-      const word = userAnswer.value.trim().toLowerCase()
-      if (!word) return
-
-      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-      const wordLetters = word.split('')
-
-      const isValidWord = res.ok || whitelist.includes(word)
-      const isBuildable = canBuildWord(wordLetters, chosenLetters.value)
-
-      if (isValidWord && isBuildable && timeLeft.value > 0 && !answers.value.map(w => w.toLowerCase()).includes(word) ) {
-        answers.value.push(userAnswer.value)
-      }
+  async function checkAnswer() {
+  const word = userAnswer.value.trim().toLowerCase()
+    if (!word) {
       userAnswer.value = ''
-  }
+      return
+    }
+
+    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+    const wordLetters = word.split('')
+
+    const isValidWord = res.ok || whitelist.includes(word)
+    const isBuildable = canBuildWord(wordLetters, chosenLetters.value)
+    const isDuplicate = answers.value.map(w => w.toLowerCase()).includes(word)
+
+    if (isValidWord && isBuildable && timeLeft.value > 0 && !isDuplicate) {
+      answers.value.push(userAnswer.value)
+    }
+
+    // Always clear input, no matter what
+    userAnswer.value = ''
+}
+
 
   function canBuildWord(wordLetters, availableLetters) {
     const tempLetters = [...availableLetters] // shallow copy
