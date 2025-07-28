@@ -25,7 +25,7 @@
         </div>
       </div>
       <div>
-        <button class="startButton" @click="start">Start</button>
+        <button class="startButton" @click="start">{{ buttonLabel }}</button>
       </div>
   </div>
 </template>
@@ -171,9 +171,11 @@
   const box5 = ref('')
   const box6 = ref('')
   const box7 = ref('')
+  const buttonLabel = ref('Start')
   const answers = ref([])
+  let chosenLetters = ref([])
 
-  const timeLeft = ref(30)
+  const timeLeft = ref(60)
   const timerActive = ref(false)
   let timer = null
 
@@ -199,9 +201,21 @@
     box5.value = vowels[getRandomInt(0, vowels.length - 1)]
     box6.value = letters[getRandomInt(0, letters.length - 1)]
     box7.value = either[getRandomInt(0, either.length - 1)]
+    const whitelist = ['is', 'be', 'to', 'a', 'an', 'in', 'on', 'by']
+    chosenLetters.value = [
+      box1.value,
+      box2.value,
+      box3.value,
+      box4.value,
+      box5.value,
+      box6.value,
+      box7.value
+    ]
+
+    buttonLabel.value = 'Reset'
 
     if (timer) clearInterval(timer)
-      timeLeft.value = 30
+      timeLeft.value = 60
       timerActive.value = true
 
       timer = setInterval(() => {
@@ -217,13 +231,30 @@
     async function checkAnswer() {
       const word = userAnswer.value.trim().toLowerCase()
       if (!word) return
-        const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-        if (res.ok) {
-          answers.value.push(userAnswer.value)
+
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+      const wordLetters = word.split('')
+
+      const isValidWord = res.ok || whitelist.includes(word)
+      const isBuildable = canBuildWord(wordLetters, chosenLetters.value)
+
+      if (isValidWord && isBuildable && timeLeft.value > 0 && !answers.value.map(w => w.toLowerCase()).includes(word) ) {
+        answers.value.push(userAnswer.value)
       }
-
-
       userAnswer.value = ''
   }
+
+  function canBuildWord(wordLetters, availableLetters) {
+    const tempLetters = [...availableLetters] // shallow copy
+
+    for (const letter of wordLetters) {
+      const index = tempLetters.indexOf(letter.toUpperCase())
+      if (index === -1) return false
+      tempLetters.splice(index, 1) // remove used letter
+    }
+
+    return true
+  }
+
 
 </script>
