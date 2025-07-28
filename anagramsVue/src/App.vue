@@ -106,7 +106,7 @@
     width: 40vw;
     min-width: 200px;
     padding: 0.5vw;
-    font-size: clamp(12px, 1.5vw, 24px);
+    font-size: clamp(16px, 1.5vw, 24px);
     border: 0.3vw solid #444;
     border-radius: 0.8vw;
   }
@@ -122,8 +122,8 @@
   }
 
   .answers {
-    font-size: clamp(16px, 1.5vw, 25px);
-    line-height: max(1.5vw, 10px); /* vertically centers single-character text */
+    font-size: clamp(12px, 1.5vw, 25px);
+    line-height: clamp(12px, 1.5vw, 25px); /* vertically centers single-character text */
     font-weight: bold;
     color: black;
   }
