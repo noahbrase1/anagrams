@@ -122,7 +122,7 @@
   }
 
   .answers {
-    font-size: max(1.5vw, 10px);
+    font-size: clamp(16px, 1.5vw, 25px);
     line-height: max(1.5vw, 10px); /* vertically centers single-character text */
     font-weight: bold;
     color: black;
