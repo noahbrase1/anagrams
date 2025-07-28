@@ -106,7 +106,7 @@
     width: 40vw;
     min-width: 200px;
     padding: 0.5vw;
-    font-size: clamp(16px, 1.5vw, 24px);
+    font-size: clamp(12px, 1.5vw, 24px);
     border: 0.3vw solid #444;
     border-radius: 0.8vw;
   }
@@ -162,14 +162,16 @@
 
   import { ref, computed } from 'vue'
 
-  const letters = ['B', 'C', 'D', 'F', 'G', 'H', 'J',
-    'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W',
-    'X', 'Y', 'Z'
+  const letters = ['B', 'C', 'D', 'F', 'G', 'H',
+    'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'W', 'Y'
   ]
+
+  const hardLetters = ['J', 'Q', 'X', 'Z']
 
   const vowels = ['A', 'E', 'I', 'O', 'U']
 
-  const unknown = [letters, vowels]
+  const unknown1 = [letters, vowels]
+  const unknown2 = [letters, hardLetters]
 
   const userAnswer = ref('')
   const box1 = ref('')
@@ -182,7 +184,7 @@
   const buttonLabel = ref('Start')
   const answers = ref([])
   let chosenLetters = ref([])
-  const whitelist = ['is', 'be', 'to', 'a', 'an', 'in', 'on', 'by']
+  const whitelist = ['is', 'be', 'to', 'a', 'an', 'in', 'on', 'by', 'tow']
 
   const timeLeft = ref(60)
   const timerActive = ref(false)
@@ -202,14 +204,15 @@
   })
 
   function start() {
-    const either = unknown[getRandomInt(0, unknown.length - 1)]
-    box1.value = letters[getRandomInt(0, letters.length - 1)]
+    const either1 = unknown1[getRandomInt(0, unknown1.length - 1)]
+    const either2 = unknown1[getRandomInt(0, unknown2.length - 1)]
+    box1.value = either2[getRandomInt(0, letters.length - 1)]
     box2.value = vowels[getRandomInt(0, vowels.length - 1)]
     box3.value = letters[getRandomInt(0, letters.length - 1)]
     box4.value = letters[getRandomInt(0, letters.length - 1)]
     box5.value = vowels[getRandomInt(0, vowels.length - 1)]
     box6.value = letters[getRandomInt(0, letters.length - 1)]
-    box7.value = either[getRandomInt(0, either.length - 1)]
+    box7.value = either1[getRandomInt(0, either.length - 1)]
     chosenLetters.value = [
       box1.value,
       box2.value,
