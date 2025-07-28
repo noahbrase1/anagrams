@@ -106,7 +106,7 @@
     width: 40vw;
     min-width: 200px;
     padding: 0.5vw;
-    font-size: 1.5vw;
+    font-size: clamp(16px, 1.5vw, 24px);
     border: 0.3vw solid #444;
     border-radius: 0.8vw;
   }
