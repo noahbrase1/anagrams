@@ -191,30 +191,6 @@
 
   const userId = ref(null)
 
-  onMounted(async () => {
-    try {
-      const result = await signInAnonymously(auth)
-      userId.value = result.user.uid
-      console.log('Logged in anonymously as', userId.value)
-    } catch (e) {
-      console.error('Auth error:', e)
-    }
-  })
-
-    async function loadHighScore() {
-    const docRef = doc(db, "scores", userId.value)
-    const docSnap = await getDoc(docRef)
-
-    if (docSnap.exists()) {
-      highScore.value = docSnap.data().score
-    }
-  }
-
-  async function updateHighScore(newScore) {
-    const docRef = doc(db, "scores", userId.value)
-    await setDoc(docRef, { score: newScore })
-  }
-
 
   const letters = ['B', 'C', 'D', 'F', 'G', 'H',
     'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'W', 'Y'
@@ -241,7 +217,6 @@
   const answers = ref([])
   let chosenLetters = ref([])
   const whitelist = ['is', 'be', 'to', 'a', 'an', 'in', 'on', 'by', 'tow']
-
   const timeLeft = ref(60)
   const timerActive = ref(false)
   let timer = null
@@ -334,6 +309,30 @@
     }
 
     return true
+  }
+
+  onMounted(async () => {
+    try {
+      const result = await signInAnonymously(auth)
+      userId.value = result.user.uid
+      console.log('Logged in anonymously as', userId.value)
+    } catch (e) {
+      console.error('Auth error:', e)
+    }
+  })
+
+  async function loadHighScore() {
+    const docRef = doc(db, "scores", userId.value)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      highScore.value = docSnap.data().score
+    }
+  }
+
+  async function updateHighScore(newScore) {
+    const docRef = doc(db, "scores", userId.value)
+    await setDoc(docRef, { score: newScore })
   }
 
 
