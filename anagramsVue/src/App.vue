@@ -1,5 +1,9 @@
 <template>
   <head><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
+  <div class="score-wrapper">
+    <div class="high-score">High Score: {{ highScore }}</div>
+    <div class="score">Score: {{ score }}</div>
+  </div>
   <div class="container">
       <div class="box1" id="box1">{{ box1 }}</div>
       <div class="box2" id="box2">{{ box2 }}</div>
@@ -51,6 +55,25 @@
     height: 100vh;             /* make body fill the viewport height */
     margin: 0;                 /* remove default margin for full control */
     padding-top: 10vh;
+  }
+  .score-wrapper {
+      position: fixed;
+      top: 1vw;
+      left: 1vw;
+      z-index: 999;
+      background-color: white;
+      padding: 0.5vw 1vw;
+      border-radius: 0.5vw;
+      border: 1px solid black;
+      font-weight: bold;
+      font-size: max(2vw, 16px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3vw;
+  }
+
+  .score, .high-score {
+    margin: 0;
   }
 
   .container {
@@ -173,6 +196,8 @@
   const unknown1 = [letters, vowels]
   const unknown2 = [letters, hardLetters]
 
+  const score = ref(0)
+  const highScore = ref(0)
   const userAnswer = ref('')
   const box1 = ref('')
   const box2 = ref('')
@@ -204,6 +229,7 @@
   })
 
   function start() {
+    score.value = 0
     const either1 = unknown1[getRandomInt(0, unknown1.length - 1)]
     const either2 = unknown2[getRandomInt(0, unknown2.length - 1)]
     box1.value = either2[getRandomInt(0, either2.length - 1)]
@@ -255,6 +281,11 @@
 
     if (isValidWord && isBuildable && timeLeft.value > 0 && !isDuplicate) {
       answers.value.push(userAnswer.value)
+      score.value += word.length
+      if (score.value > highScore.value) {
+        highScore.value = score.value
+      }
+
     }
 
     // Always clear input, no matter what
