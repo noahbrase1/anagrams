@@ -184,6 +184,37 @@
 
 
   import { ref, computed } from 'vue'
+  import { onMounted } from 'vue'
+  import { auth, signInAnonymously } from './firebase'
+  import { db } from './firebase'
+  import { doc, getDoc, setDoc } from 'firebase/firestore'
+
+  const userId = ref(null)
+
+  onMounted(async () => {
+    try {
+      const result = await signInAnonymously(auth)
+      userId.value = result.user.uid
+      console.log('Logged in anonymously as', userId.value)
+    } catch (e) {
+      console.error('Auth error:', e)
+    }
+  })
+
+    async function loadHighScore() {
+    const docRef = doc(db, "scores", userId.value)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      highScore.value = docSnap.data().score
+    }
+  }
+
+  async function updateHighScore(newScore) {
+    const docRef = doc(db, "scores", userId.value)
+    await setDoc(docRef, { score: newScore })
+  }
+
 
   const letters = ['B', 'C', 'D', 'F', 'G', 'H',
     'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'W', 'Y'
