@@ -4,6 +4,12 @@
     <div class="high-score">High Score: {{ highScore }}</div>
     <div class="score">Score: {{ score }}</div>
   </div>
+  <div class="score-wrapper">
+    <div class="high-score">High Score: {{ highScore }}</div>
+    <div class="score">Score: {{ score }}</div>
+    <button class="logout-button" @click="logout">Log Out</button>
+  </div>
+
   <div class="container">
       <div class="box1" id="box1">{{ box1 }}</div>
       <div class="box2" id="box2">{{ box2 }}</div>
@@ -74,6 +80,20 @@
 
   .score, .high-score {
     margin: 0;
+  }
+
+  .logout-button {
+    margin-top: 0.5vw;
+    padding: 0.3vw 0.7vw;
+    font-size: max(1.5vw, 12px);
+    border-radius: 0.5vw;
+    border: 1px solid black;
+    background-color: white;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .logout-button:hover {
+    background-color: #eee;
   }
 
   .container {
@@ -181,10 +201,16 @@
 </style>
 
 <script setup>
+import { getAuth, signOut } from "firebase/auth";
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { db } from '../firebase'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { onBeforeUnmount } from 'vue'
+
+onBeforeUnmount(() => {
+  if (timer) clearInterval(timer)
+})
 
 const router = useRouter()
 const username = ref('')
@@ -231,6 +257,20 @@ async function saveHighScoreIfNeeded() {
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
+
+  const auth = getAuth();
+
+  function logout() {
+    signOut(auth)
+      .then(() => {
+        localStorage.removeItem('username'); // clear saved username
+        router.push('/'); // go back to login page
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+  }
+
 
   const chunkedAnswers = computed(() => {
     const chunkSize = 6
@@ -296,9 +336,6 @@ async function saveHighScoreIfNeeded() {
     if (isValidWord && isBuildable && timeLeft.value > 0 && !isDuplicate) {
       answers.value.push(userAnswer.value)
       score.value += word.length
-      if (score.value > highScore.value) {
-        highScore.value = score.value
-      }
 
     }
 
