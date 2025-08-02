@@ -1,15 +1,25 @@
+// src/router/index.js or router.js
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginPage from '../LoginPage.vue'
-import GamePage from '../GamePage.vue'
+import LoginPage from '../pages/LoginPage.vue'
+import GamePage from '../pages/GamePage.vue'
+
 
 const routes = [
-  { path: '/', component: LoginPage },
-  { path: '/game', component: GamePage }
+  {
+    path: '/',
+    name: 'Login',
+    component: LoginPage,
+  },
+  {
+    path: '/game',
+    name: 'Game',
+    component: GamePage,
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
 export default router
