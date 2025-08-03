@@ -77,6 +77,11 @@
       flex-direction: column;
       gap: 0.3vw;
   }
+  @media (max-width: 600px) {
+    body {
+      padding-top: 20vh;
+    }
+  }
 
   .score, .high-score {
     margin: 0;
