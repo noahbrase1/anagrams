@@ -54,6 +54,12 @@
     overflow-y: auto;
   }
 
+  html, body {
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+
   body {
     display: flex;
     justify-content: center;   /* horizontal center */
